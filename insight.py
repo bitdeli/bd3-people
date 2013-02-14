@@ -1,14 +1,20 @@
 from bitdeli.insight import insight
-from bitdeli.widgets import Text, Bar, Table
+from bitdeli.widgets import Table
 from discodb.query import Q, Literal, Clause
+from itertools import islice
+import json
+
+def rows(model):
+    for uid, values in islice(model.items(), 50):
+        rows = {' uid': uid}
+        rows.update(tuple(json.loads(value)) for value in values)
+        yield rows
 
 @insight
 def view(model, params):
-    params = {'events': ['$signup', 'Clip created']}
-    def steps(events):
-        for i in range(len(events)):
-            q = Q([Clause([Literal(event)]) for event in events[:i + 1]])
-            yield events[i], len(model.query(q))
-    return [Bar(size=(12, 6),
-                data=list(steps(params['events'])))]
+    return [Table(label='people',
+                  size=(12, 6),
+                  data=list(rows(model)))]
+                  
+        
     
