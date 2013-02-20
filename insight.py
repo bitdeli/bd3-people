@@ -12,9 +12,10 @@ def rows(model):
 
 @insight
 def view(model, params):
-    return [Users(label='people',
+    data = list(rows(model))
+    return [Users(label='%d users' % len(data),
                   size=(12, "auto"),
-                  data=list(rows(model)))]
+                  data=data)]
                   
         
     
