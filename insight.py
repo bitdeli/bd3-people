@@ -13,7 +13,7 @@ def rows(model):
 @insight
 def view(model, params):
     return [Table(label='people',
-                  size=(12, 6),
+                  size=(12, "auto"),
                   data=list(rows(model)))]
                   
         
