@@ -30,6 +30,7 @@ def build(profiles):
             
 @segment_model
 def segment(model, segments, labels):
+    print 'labels %s' % str(labels)
     class SegmentModel(object):
         def items(self):
             segs = list(sorted(segments, key=lambda s: len(s)))
