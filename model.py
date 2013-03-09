@@ -29,7 +29,7 @@ def build(profiles):
             yield profile.uid, json.dumps((key, val))
             
 @segment_model
-def segment(model, segments):
+def segment(model, segments, labels):
     class SegmentModel(object):
         def items(self):
             segs = list(sorted(segments, key=lambda s: len(s)))
