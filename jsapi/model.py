@@ -1,5 +1,5 @@
 import json
-from itertools import chain
+from itertools import islice
 from datetime import datetime
 from bitdeli.model import model, segment_model
 
@@ -24,9 +24,15 @@ def attributes(properties):
 @model
 def build(profiles):
     for profile in profiles:
-        for key, val in chain(attributes(profile['properties']),
-                              [('events', newest(profile['events'], top=5))]):
-            yield profile.uid, json.dumps((key, val))
+        first = True
+        events = []
+        for tstamp, group, ip, event in islice(profile['events'], 5):
+            events.append((event.pop('$event_name'), tstamp))
+            if first:
+                first = False
+                for key, val in event.iteritems():
+                    yield profile.uid, json.dumps((key, val))
+        yield profile.uid, json.dumps(('events', events))
             
 @segment_model
 def segment(model, segments, labels):
