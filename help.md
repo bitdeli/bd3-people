@@ -9,4 +9,6 @@ When a segment is selected, the list is filtered to only show users
 from that segment.
 
 **Example:** See latest events at a glance for your *Most active*
-users by creating the segment in the *Activity Distribution* insight and opening this insight with the segment selected.
+users by creating the segment in
+[Activity Distribution](/explore/bitdeli/activity-distribution)
+and opening this insight with the segment selected.
