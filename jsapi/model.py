@@ -1,29 +1,20 @@
 import json
 from itertools import islice, chain
 from datetime import datetime
+from urlparse import urlparse
 from bitdeli.model import model, segment_model
 
-MAX_URL = 64
+MAX_LEN = 32
 MAX_EVENTS = 10
 
-# Customize to hide domain from page views
-# Example: "bitdeli.com"
-URL_DOMAIN = ""
-
 def get_event_name(event):
-    name = event.get('$event_name', None)
+    name = event.get('$event_name')
     if name == '$dom_event':
-        name = event.get('$event_label', None)
+        name = event.get('$event_label')
     elif name == '$pageview':
-        if not event.get('$page', ''):
-            return
-        url = event['$page']
-        splitter = URL_DOMAIN if URL_DOMAIN else 'http://'
-        if splitter in url:
-            url = url.split(splitter, 1)[1]
-        name = ('...' + url[-MAX_URL:]) if len(url) > MAX_URL else url
+        name = urlparse(event.get('$page', '')).path
     if name:
-        return name
+        return name[:MAX_LEN].encode('utf-8')
 
 @model
 def build(profiles):
